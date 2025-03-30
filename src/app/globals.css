@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background-primary: #1a1b26;
+    --background-secondary: #24283b;
+    --background-tertiary: #2f334d;
+    --text-primary: #a9b1d6;
+    --text-secondary: #787c99;
+    --accent-color: #7aa2f7;
+    --accent-hover: #5699f3;
+    --border-color: #414868;
+    --input-bg: #1a1b26;
+    --dropdown-bg: #1a1b26;
+    --dropdown-hover: #2f334d;
+    --error-color: #f7768e;
+    --success-color: #9ece6a;
+    --background-tertiary-rgb: 47, 51, 77;
+    --accent-color-rgb: 122, 162, 247;
+    --error-color-rgb: 247, 118, 142;
+  }
+
+  body {
+    @apply bg-[var(--background-primary)] text-[var(--text-primary)] antialiased min-h-screen;
+  }
+
+  /* Enhanced Select Styling */
+  select {
+    @apply appearance-none bg-[var(--dropdown-bg)] text-[var(--text-primary)] border-2 border-[var(--border-color)] 
+           rounded-lg px-4 py-3 pr-10 w-full cursor-pointer 
+           hover:bg-[var(--dropdown-hover)] hover:border-[var(--accent-color)]
+           focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] focus:border-[var(--accent-color)]
+           text-lg transition-all duration-200;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%237aa2f7' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.75em 1.75em;
+  }
+
+  /* Enhanced Input & Textarea Styling */
+  input[type="text"], textarea {
+    @apply bg-[var(--input-bg)] border-2 border-[var(--border-color)] text-[var(--text-primary)]
+           rounded-lg px-4 py-3 w-full
+           hover:border-[var(--accent-color)]
+           focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)] focus:border-[var(--accent-color)]
+           placeholder-[var(--text-secondary)]
+           transition-all duration-200;
+  }
+
+  /* Button Base Styles */
+  button {
+    @apply transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  /* Scrollbar Styling */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-[var(--background-secondary)] rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-[var(--border-color)] rounded-full hover:bg-[var(--accent-color)] transition-colors duration-200;
+  }
+
+  /* Message Container Styling */
+  .message-container {
+    @apply backdrop-blur-sm shadow-lg;
+    background-color: rgba(var(--background-tertiary-rgb), 0.75);
+  }
+
+  /* Form Field Animation */
+  .form-field {
+    @apply transform transition-all duration-200 hover:translate-y-[-2px];
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}

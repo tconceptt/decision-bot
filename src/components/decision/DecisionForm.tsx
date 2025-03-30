@@ -55,7 +55,42 @@ Instructions:
 5. Be confident and decisive in your choice, even if you have to make educated guesses.
 `;
 
-    await sendMessageToApi(decisionPrompt, 'system', setIsLoading, setMessages);
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: decisionPrompt
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get decision');
+      }
+
+      const data = await response.json();
+      
+      // Only add the AI's response to the message history
+      setMessages((prev) => [
+        ...prev,
+        { id: Date.now(), role: 'model', content: data.response }
+      ]);
+    } catch (error) {
+      console.error('Error getting decision:', error);
+      setMessages((prev) => [
+        ...prev,
+        { 
+          id: Date.now(), 
+          role: 'error', 
+          content: error instanceof Error ? error.message : 'An unexpected error occurred.' 
+        }
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
 
     setIsDecidingMode(false);
     setDecisionOptions(Array(numberOfOptions).fill(''));

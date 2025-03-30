@@ -1,6 +1,5 @@
+import { MAX_OPTIONS, Message } from '@/types';
 import React, { FormEvent } from 'react';
-import { Message, MAX_OPTIONS } from '@/types';
-import { sendMessageToApi } from '@/utils/api';
 
 interface DecisionFormProps {
   isLoading: boolean;

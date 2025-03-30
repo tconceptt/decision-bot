@@ -29,13 +29,13 @@ export const sendMessageToApi = async (
     const modelMessage: Message = { id: Date.now(), role: 'model', content: data.response };
     setMessages((prev) => [...prev, modelMessage]);
 
-  } catch (err: any) {
-    console.error("API Fetch Error:", err);
+  } catch (error: unknown) {
+    console.error("API Fetch Error:", error);
     setMessages((prev) => prev.filter((msg) => msg.role !== 'loading'));
     const errorMessage: Message = { 
       id: Date.now(), 
       role: 'error', 
-      content: err.message || 'An unexpected error occurred.' 
+      content: error instanceof Error ? error.message : 'An unexpected error occurred.' 
     };
     setMessages((prev) => [...prev, errorMessage]);
   } finally {

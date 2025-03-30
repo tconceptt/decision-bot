@@ -1,4 +1,5 @@
 import { FormEvent } from 'react';
+import { Message } from '@/types';
 import { sendMessageToApi } from '@/utils/api';
 
 interface ChatInputProps {
@@ -6,7 +7,7 @@ interface ChatInputProps {
   setPrompt: (prompt: string) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
-  setMessages: (updater: (prev: any[]) => any[]) => void;
+  setMessages: (updater: (prev: Message[]) => Message[]) => void;
 }
 
 export const ChatInput = ({

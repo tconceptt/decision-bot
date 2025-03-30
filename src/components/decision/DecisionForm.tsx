@@ -1,5 +1,5 @@
-import { FormEvent, ChangeEvent } from 'react';
-import { MAX_OPTIONS } from '@/types';
+import React, { FormEvent } from 'react';
+import { Message, MAX_OPTIONS } from '@/types';
 import { sendMessageToApi } from '@/utils/api';
 
 interface DecisionFormProps {
@@ -7,11 +7,11 @@ interface DecisionFormProps {
   numberOfOptions: number;
   setNumberOfOptions: (num: number) => void;
   decisionOptions: string[];
-  setDecisionOptions: (options: string[]) => void;
+  setDecisionOptions: React.Dispatch<React.SetStateAction<string[]>>;
   decisionContext: string;
   setDecisionContext: (context: string) => void;
   setIsDecidingMode: (deciding: boolean) => void;
-  setMessages: (updater: (prev: any[]) => any[]) => void;
+  setMessages: (updater: (prev: Message[]) => Message[]) => void;
   setIsLoading: (loading: boolean) => void;
 }
 
@@ -28,7 +28,7 @@ export const DecisionForm = ({
   setIsLoading
 }: DecisionFormProps) => {
   const handleOptionChange = (index: number, value: string) => {
-    setDecisionOptions(prev => {
+    setDecisionOptions((prev: string[]) => {
       const newOptions = [...prev];
       newOptions[index] = value;
       return newOptions;

@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
-import { Message, MAX_OPTIONS } from '@/types';
+import { Message } from '@/types';
 import { MessageBubble } from '@/components/chat/MessageBubble';
 import { ChatInput } from '@/components/chat/ChatInput';
 import { DecisionForm } from '@/components/decision/DecisionForm';
@@ -34,7 +34,7 @@ export default function Home() {
       {/* Header */}
       <header className="bg-[var(--background-secondary)] shadow-xl p-6 border-b border-[var(--border-color)] sticky top-0 z-10">
         <h1 className="text-center text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-color)] to-[var(--success-color)]">
-          Abby's Little Helper ✨
+          Abby&apos;s Little Helper ✨
         </h1>
       </header>
 
@@ -42,7 +42,7 @@ export default function Home() {
       <main className="flex-grow overflow-y-auto p-6 space-y-6 bg-[var(--background-primary)] scroll-smooth">
         {messages.length === 0 && !isLoading && !isDecidingMode && (
           <div className="text-center text-[var(--text-secondary)] mt-20 text-lg">
-            Type a message or click "Help Me Decide" below ✨
+            Type a message or click &quot;Help Me Decide&quot; below ✨
           </div>
         )}
         {messages.map((message) => (

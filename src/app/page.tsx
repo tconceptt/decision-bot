@@ -35,6 +35,7 @@ export default function Home() {
       <header className="bg-[var(--background-secondary)] shadow-xl p-6 border-b border-[var(--border-color)] sticky top-0 z-10">
         <h1 className="text-center text-2xl sm:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent-color)] to-[var(--success-color)]">
           Abby&apos;s Little Helper ✨
+          And T&apos;s slave
         </h1>
       </header>
 

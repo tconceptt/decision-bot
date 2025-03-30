@@ -1,25 +1,27 @@
 // src/app/api/chat/route.ts
+import { GoogleGenerativeAI, GenerativeModel } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 
 // --- Type Definitions (Optional but good practice) ---
 type RequestBody = {
   prompt: string;
 };
 
-type ResponseData = {
+interface ResponseData {
   response?: string; // Successful response text
   error?: string;    // Error message
-  details?: any;     // Optional additional error details
+  details?: {
+    finishReason?: string;
+    safetyRatings?: unknown;
+  };
 }
 
 // --- Get API Key ---
 const apiKey = process.env.GEMINI_API_KEY;
 
 // --- Initialize Gemini Client (Cached Instance) ---
-
 let genAI: GoogleGenerativeAI | null = null;
-let model: any = null; // Consider using a more specific type if available from SDK
+let model: GenerativeModel | null = null;
 
 function initializeGeminiClient() {
     if (!apiKey) {
@@ -45,17 +47,8 @@ function initializeGeminiClient() {
 // Ensure client is initialized when the module loads or on first request
 initializeGeminiClient();
 
-
-
-const generationConfig = {
-   // temperature: 0.7,
-   // maxOutputTokens: 2048,
-};
-
-
 // --- POST Handler for the API route ---
 export async function POST(req: Request): Promise<NextResponse<ResponseData>> {
-
   // Re-check initialization in case of serverless cold starts or errors
   if (!genAI || !model) {
        if (!initializeGeminiClient() || !model) { // Attempt re-initialization
@@ -80,19 +73,15 @@ export async function POST(req: Request): Promise<NextResponse<ResponseData>> {
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
     return NextResponse.json({ error: 'Invalid request: "prompt" must be a non-empty string.' }, { status: 400 });
   }
-   if (prompt.length > 5000) { // Example length limit
-     return NextResponse.json({ error: 'Prompt is too long (max 5000 characters).' }, { status: 400 });
-   }
+  if (prompt.length > 5000) { // Example length limit
+    return NextResponse.json({ error: 'Prompt is too long (max 5000 characters).' }, { status: 400 });
+  }
 
   console.log(`🤖 API Route: Processing prompt - "${prompt.substring(0, 60)}..."`);
 
   try {
     // 3. Call Gemini API
-    const result = await model.generateContent(
-        prompt,
-        // Uncomment to use config: { safetySettings, generationConfig }
-    );
-
+    const result = await model.generateContent(prompt);
     const response = result.response;
     const text = response?.text(); // Safely get text
 
@@ -119,9 +108,7 @@ export async function POST(req: Request): Promise<NextResponse<ResponseData>> {
   } catch (error: unknown) {
     // 6. Handle Unexpected Errors during API call
     console.error("🔴 API Route: Error calling Gemini API:", error);
-    let message = 'An unexpected error occurred while contacting the AI model.';
-    // Log more details server-side if needed
-    // if (error instanceof Error) { console.error(error.stack); }
+    const message = 'An unexpected error occurred while contacting the AI model.';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
